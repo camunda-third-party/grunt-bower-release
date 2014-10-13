@@ -32,6 +32,7 @@ module.exports = function(grunt) {
 
   var Git = require('./endpoints/git');
   var Test = require('./endpoints/test-ep');
+  var semver = require('semver');
 
   /*
    * Other VCS tools can be added here as needed in the future.
@@ -299,8 +300,9 @@ module.exports = function(grunt) {
 
       function tag() {
         /* Tag name must be valid semver -- but I'm not validating this here. */
-        /* TODO: Validate this here! */
         var tag = (options.suffixTagWithTimestamp) ? bowerJSON.version + '+' + new Date().getTime() : bowerJSON.version;
+        if (!semver.valid(tag))
+          finish(new Error('Invalid semantic version tag used: \'' + tag + '\'! See http://semver.org/ for specification.'))
         endpoint.tag(tag, makeTagMsg(options.packageName), function() { tagged(tag) });
       }
 
