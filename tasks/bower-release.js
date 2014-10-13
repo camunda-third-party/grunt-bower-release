@@ -63,7 +63,9 @@ module.exports = function(grunt) {
         finish = this.async(),
         options = this.options({
           'stageDir': 'staging',
-          'endpointType': 'git'
+          'endpointType': 'git',
+          'branchName': 'master',
+          'createTag': true
         }),
         self = this,
         bowerJSON,
@@ -294,7 +296,11 @@ module.exports = function(grunt) {
             endpoint.removeVersionTags(tags, tag);
           });
         } else {
-          tag();
+          if (options.createTag) {
+            tag();
+          } else {
+            tagged();
+          }
         }
       }
 

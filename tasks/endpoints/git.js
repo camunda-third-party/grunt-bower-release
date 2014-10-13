@@ -166,7 +166,8 @@ function Git(grunt, async) {
       args.push('origin')
       if(typeof branch === 'string')
         args.push(branch)
-      args.push(tag)
+      if (typeof tag === 'string')
+        args.push(tag)
       grunt.verbose.writeln('git ' + args.join(' '))
       grunt.util.spawn({
         cmd: 'git',
