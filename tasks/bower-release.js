@@ -64,8 +64,8 @@ module.exports = function(grunt) {
         options = this.options({
           'stageDir': 'staging',
           'endpointType': 'git',
-          'branchName': 'master',
-          'createTag': true
+          'createTag': true,
+          'push': true
         }),
         self = this,
         bowerJSON,
@@ -313,8 +313,10 @@ module.exports = function(grunt) {
       }
 
       function tagged(tag) {
-        /* After commiting/tagging the release, push to the server */
-        endpoint.push(options.branchName, tag, pushed)
+        if (options.push) {
+          /* After commiting/tagging the release, push to the server */
+          endpoint.push(options.branchName, tag, pushed)
+        }
       }
 
       function pushed(err) {
