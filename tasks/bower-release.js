@@ -316,6 +316,8 @@ module.exports = function(grunt) {
         if (options.push) {
           /* After commiting/tagging the release, push to the server */
           endpoint.push(options.branchName, tag, pushed)
+        } else {
+          finish();
         }
       }
 
