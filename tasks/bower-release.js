@@ -270,10 +270,11 @@ module.exports = function(grunt) {
         /* Files have been added to the repository (assuming this didn't fail)
          * At this point, commit and tag the changeset
          */
-        var msg = grunt.option('m') || grunt.option('message')
-        if(typeof msg !== 'string' || !msg.length)
-          msg = 'Bumped version to ' + bowerJSON.version
-        endpoint.commit(msg, shouldOverwriteTag)
+        var msg = grunt.option('m') || grunt.option('message') || options.commitMessage;
+        if(typeof msg !== 'string' || !msg.length) {
+          msg = 'Bumped version to ' + bowerJSON.version;
+        }
+        endpoint.commit(msg, shouldOverwriteTag);
       }
 
       function shouldOverwriteTag() {
@@ -309,7 +310,8 @@ module.exports = function(grunt) {
         var tag = (options.suffixTagWithTimestamp) ? bowerJSON.version + '+' + new Date().getTime() : bowerJSON.version;
         if (!semver.valid(tag))
           finish(new Error('Invalid semantic version tag used: \'' + tag + '\'! See http://semver.org/ for specification.'))
-        endpoint.tag(tag, makeTagMsg(options.packageName), function() { tagged(tag) });
+        var msg = options.tagMessage || options.packageName + '@' + bowerJSON.version;
+        endpoint.tag(tag, msg, function() { tagged(tag) });
       }
 
       function tagged(tag) {
@@ -341,10 +343,6 @@ module.exports = function(grunt) {
             finish(err);
           finish();
         });
-      }
-
-      function makeTagMsg(name) {
-        return name + '@' + bowerJSON.version
       }
     }
  })
