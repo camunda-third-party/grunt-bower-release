@@ -24,22 +24,16 @@
 
 function Git(grunt, async) {
   /* Verbosity */
-  var streams = [undefined, undefined, undefined]
+  var streams = [undefined, undefined, undefined];
   if(grunt.option('verbose')) {
-    streams[1] = process.stdout
-    streams[2] = process.stderr
+    streams[1] = process.stdout;
+    streams[2] = process.stderr;
   }
   var gitEndpoint = {
     /* Ensure that the VCS is installed on the system, and therefore usable. */
     setUp: function(parentArg, done) {
-      grunt.util.spawn({
-        cmd: 'git',
-        args: ['version'],
-        opts: {
-          /* Don't spam */
-          stdio: 'ignore'
-        }
-      }, done)
+      // set streams to skip output
+      gitExec(['version'], 'ignore', done);
     },
 
     tearDown: function(done) {
@@ -49,56 +43,38 @@ function Git(grunt, async) {
     /* Clone the repository at 'endpoint' into the current directory */
     clone: function(endpoint, branch, dir, done) {
       if(typeof dir === 'function') {
-        done = dir
+        done = dir;
         dir = '.'
       }
-      var args = ['clone', endpoint, dir]
+
+      var args = ['clone', endpoint, dir];
       if(typeof branch === 'string') {
-        args.push('-b')
+        args.push('-b');
         args.push(branch)
       }
-      grunt.verbose.writeln('git ' + args.join(' '))
-      grunt.util.spawn({
-        cmd: 'git',
-        args: args,
-        opts: { stdio: streams }
-      }, function(err) {
-        if(err || typeof branch !== 'string') return done(err)
-        else {
-          args = ['checkout', '-B', branch]
-          grunt.verbose.writeln('git ' + args.join(' '))
-          grunt.util.spawn({
-            cmd: 'git',
-            args: args
-          }, done)
+
+      gitExec(args, streams, function(err) {
+        if(err || typeof branch !== 'string') {
+          return done(err);
+        } else {
+          gitExec(['checkout', '-B', branch], 'ignore', done);
         }
-      })
+      });
     },
 
     /* Add the array of files into the repository, relative to the CWD */
     add: function(files, done) {
       async.eachSeries(files, function(file, done) {
         //Double check for avoiding failing on undefined files in array
-        if (!file) return done()
-        var args = ['add', file]
-        grunt.verbose.writeln('git ' + args.join(' '))
-        grunt.util.spawn({
-          cmd: 'git',
-          args: args,
-          opts: { stdio: streams }
-        }, done)
+        if (!file) return done();
+        var args = ['add', file];
+        gitExec(args, streams, done);
       }, done);
     },
 
     /* Commit the current changes to a changeset, with the specified message. */
     commit: function(message, done) {
-      var args = [ 'commit', '-m', message]
-      grunt.verbose.writeln('git ' + args.join(' '))
-      grunt.util.spawn({
-        cmd: 'git',
-        args: args,
-        opts: { stdio: streams }
-      }, done)
+      gitExec([ 'commit', '-m', message], streams, done);
     },
 
     removeVersionTags: function(tags, done) {
@@ -107,12 +83,7 @@ function Git(grunt, async) {
     },
 
     getVersionTags: function(version, done) {
-      grunt.verbose.writeln('git tag');
-
-      grunt.util.spawn({
-        cmd: 'git',
-        args: ['tag']
-      }, function(error, result) {
+      gitExec(['tag'], 'ignore', function(err, result) {
         var tags = result.stdout.split(/\n/);
         done(tags.filter(function(tag) {
           return tag.indexOf(version) === 0;
@@ -121,61 +92,50 @@ function Git(grunt, async) {
     },
 
     removeLocalTag: function(tag, done) {
-      var args = ['tag', '-d', tag];
-      grunt.verbose.writeln('git ' + args.join(' '));
-      grunt.util.spawn({
-        cmd: 'git',
-        args: args,
-        opts: { stdio: streams }
-      }, function () {
+      gitExec(['tag', '-d', tag], streams, function () {
         gitEndpoint.removeRemoteTag(tag, done);
       });
     },
 
     removeRemoteTag: function(tag, done) {
-      var args = ['push', 'origin', ':refs/tags/' + tag];
-      grunt.verbose.writeln('git ' + args.join(' '));
-      grunt.util.spawn({
-        cmd: 'git',
-        args: args,
-        opts: { stdio: streams }
-      }, done);
+      gitExec(['push', 'origin', ':refs/tags/' + tag], streams, done);
     },
 
     /* 'Tag' the release */
     tag: function(tagname, msg, done) {
-      var args = ['tag', tagname]
+      var args = ['tag', tagname];
       if(typeof msg === 'string') {
-        args.push('-m')
-        args.push(msg)
+        args.push('-m');
+        args.push(msg);
       } else if(typeof msg === 'function') {
-        done = msg
+        done = msg;
       }
-      grunt.verbose.writeln('git ' + args.join(' '))
-      grunt.util.spawn({
-        cmd: 'git',
-        args: args,
-        opts: { stdio: streams }
-      }, done)
+
+      gitExec(args, streams, done);
     },
 
     /* Push the changesets to the server */
     push: function(branch, tag, done) {
-      var args = []
-      args.push('push')
-      args.push('origin')
+      var args = [];
+      args.push('push');
+      args.push('origin');
       if(typeof branch === 'string')
-        args.push(branch)
+        args.push(branch);
       if (typeof tag === 'string')
-        args.push(tag)
-      grunt.verbose.writeln('git ' + args.join(' '))
-      grunt.util.spawn({
-        cmd: 'git',
-        args: args,
-        opts: { stdio: streams }
-      }, done)
+        args.push(tag);
+
+      gitExec(args, streams, done);
     }
   };
+
+  function gitExec(args, stdio, done) {
+    grunt.verbose.writeln('git ' + args.join(' '));
+    grunt.util.spawn({
+      cmd: 'git',
+      args: args,
+      opts: { stdio: streams }
+    }, done);
+  }
 
   return gitEndpoint;
 }
