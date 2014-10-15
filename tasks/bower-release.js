@@ -143,14 +143,14 @@ module.exports = function(grunt) {
     endpoint.setUp(this, ready)
 
     function ready(err) {
-      if(err) return finish(err)
+      if(err) return finish(err);
 
       /* Make stageDir absolute */
       options.stageDir = path.resolve(options.stageDir)
 
       /* Fail if stageDir is the current directory */
       if(options.stageDir === startDir) {
-        finish(new Error('Cannot use current working directory as stageDir'))
+        finish(new Error('Cannot use current working directory as stageDir'));
         return false
       }
 
@@ -159,7 +159,7 @@ module.exports = function(grunt) {
       try {
         stat = fs.statSync(options.stageDir)
         if(stat && !stat.isDirectory()) {
-          finish(new Error('stageDir is not a directory'))
+          finish(new Error('stageDir is not a directory'));
           return false
         }
       } catch(e) { /* ENOENT */ }
@@ -173,6 +173,9 @@ module.exports = function(grunt) {
        */
       endpoint.clone(options.endpoint, options.branchName, '.', cloned)
       function cloned(err) {
+        if (err) {
+          return finish(new Error('Cloning failed. Error: ' + err));
+        }
         /* An error may have happened, but isn't really consequential.
          * Now, copy in each of the files that we care about.
          */
