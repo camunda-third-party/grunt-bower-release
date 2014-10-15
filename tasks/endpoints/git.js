@@ -47,13 +47,7 @@ function Git(grunt, async) {
         dir = '.'
       }
 
-      var args = ['clone', endpoint, dir];
-      if(typeof branch === 'string') {
-        args.push('-b');
-        args.push(branch)
-      }
-
-      gitExec(args, streams, function(err) {
+      gitExec(['clone', endpoint, dir], streams, function(err) {
         if(err || typeof branch !== 'string') {
           return done(err);
         } else {
