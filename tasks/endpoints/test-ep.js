@@ -94,7 +94,7 @@ function Test(grunt) {
     },
 
     /* Push the changesets to the server */
-    push: function (branch, tag, done) {
+    push: function (branch, tag, force, done) {
       endPoint.call('push', arguments);
       done()
     },

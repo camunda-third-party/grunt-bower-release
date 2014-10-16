@@ -47,13 +47,29 @@ function Git(grunt, async) {
         dir = '.'
       }
 
-      gitExec(['clone', endpoint, dir], streams, function(err) {
+      var args = ['clone', endpoint, dir];
+//      if(typeof branch === 'string') {
+//        // checkout specific branch
+//        args.push('-b');
+//        args.push(branch)
+//      }
+
+      gitExec(args, streams, function(err) {
         if(err || typeof branch !== 'string') {
           return done(err);
         } else {
           gitExec(['checkout', '-B', branch], 'ignore', done);
         }
       });
+    },
+
+    checkBranchExists: function(branch, done) {
+      var args = ['branch', '--list', '-r', '*' + branch + '*'];
+      gitExec(args, streams, function(err) {
+        if (err) {
+          done(err);
+        }
+      }, done)
     },
 
     /* Add the array of files into the repository, relative to the CWD */
@@ -109,14 +125,20 @@ function Git(grunt, async) {
     },
 
     /* Push the changesets to the server */
-    push: function(branch, tag, done) {
+    push: function(branch, tag, force, done) {
       var args = [];
+
       args.push('push');
       args.push('origin');
-      if(typeof branch === 'string')
+      if(typeof branch === 'string') {
         args.push(branch);
-      if (typeof tag === 'string')
+      }
+      if (typeof tag === 'string') {
         args.push(tag);
+      }
+      if (force) {
+        args.push('--force');
+      }
 
       gitExec(args, streams, done);
     }

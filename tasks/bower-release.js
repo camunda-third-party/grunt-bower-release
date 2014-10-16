@@ -65,7 +65,8 @@ module.exports = function(grunt) {
           'stageDir': 'staging',
           'endpointType': 'git',
           'createTag': true,
-          'push': true
+          'push': true,
+          'forcePush': false
         }),
         self = this,
         bowerJSON,
@@ -173,7 +174,7 @@ module.exports = function(grunt) {
       } catch(e) { /* ENOENT */ }
 
       if(typeof stat !== 'undefined') {
-        fs.rmrfSync(options.stageDir)
+        fs.rmrfSync(options.stageDir);
       }
       fs.mkdirRecursiveSync(options.stageDir);
       process.chdir(options.stageDir);
@@ -336,7 +337,7 @@ module.exports = function(grunt) {
       function tagged(tag) {
         if (options.push) {
           /* After commiting/tagging the release, push to the server */
-          endpoint.push(options.branchName, tag, pushed);
+          endpoint.push(options.branchName, tag, options.forcePush, pushed);
         } else {
           finish();
         }
