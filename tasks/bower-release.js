@@ -109,7 +109,7 @@ module.exports = function(grunt) {
 
     /* Fail if we don't have an endpoint */
     if (typeof options.endpoint === 'undefined') {
-      return finish(new Error('Missing required \'endpoint\' parameter'))
+      return finish(new Error("Missing required 'endpoint' parameter"))
     }
 
     bowerJSON.endpoint = options.endpoint;
@@ -124,6 +124,7 @@ module.exports = function(grunt) {
       bowerJSON.main = options.main
     }
 
+    /* Override or extend dependencies */
     var dependencies = {};
 
     if (options.extendDependencies === true) {
@@ -139,7 +140,16 @@ module.exports = function(grunt) {
       bowerJSON.dependencies = grunt.util._.extend(dependencies || {}, options.dependencies || {});
     }
 
-    /* TODO: Support devDependency overriding? Is that really needed? */
+    /* By default remove dev dependencies */
+    if ( !( typeof options.keepDevDependencies === 'boolean' && options.keepDevDependencies === true ) ) {
+      delete bowerJSON.devDependencies;
+    }
+
+    /* Override private option */
+    delete bowerJSON.private;
+    if ( typeof options.private === 'boolean' ) {
+      bowerJSON.private = options.private;
+    }
 
     /* For now, 'git' is the only supported endpoint type, and we aren't doing anything
      * complicated to figure out the correct VCS or protocol. So just assume 'git'
