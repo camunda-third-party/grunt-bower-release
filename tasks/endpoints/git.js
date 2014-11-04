@@ -124,20 +124,20 @@ function Git(grunt, async) {
       gitExec(args, streams, done);
     },
 
-    /* Push the changesets to the server */
+    /* Push the tags and changesets to the server */
     push: function(branch, tag, force, done) {
       var args = [];
 
       args.push('push');
       args.push('origin');
-      if(typeof branch === 'string') {
-        args.push(branch);
-      }
       if (typeof tag === 'string') {
-        args.push(tag);
+        args.push('--follow-tags');
       }
       if (force) {
         args.push('--force');
+      }
+      if(typeof branch === 'string') {
+        args.push(branch);
       }
 
       gitExec(args, streams, done);
@@ -145,7 +145,7 @@ function Git(grunt, async) {
   };
 
   function gitExec(args, stdio, done) {
-    grunt.verbose.writeln('git ' + args.join(' '));
+    grunt.verbose.writeln('Executing command: git ' + args.join(' '));
     grunt.util.spawn({
       cmd: 'git',
       args: args,
