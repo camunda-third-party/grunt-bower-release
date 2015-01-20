@@ -102,7 +102,7 @@ module.exports = function(grunt) {
       options: {
         npm: false
       }
-    }
+    },
 
     // Unit tests.
     nodeunit: {
