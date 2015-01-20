@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/caitp/grunt-bower-release.git"
+    "url": "https://github.com/camunda-third-party/grunt-bower-release.git"
   },
   "keywords": [
     "bower",
@@ -21,7 +21,7 @@
   "author": "Caitlin Potter, Christian Lipphardt",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/caitp/grunt-bower-release/issues"
+    "url": "https://github.com/camunda-third-party/grunt-bower-release/issues"
   },
   "dependencies": {
     "fs.extra": "~1.2.1",
