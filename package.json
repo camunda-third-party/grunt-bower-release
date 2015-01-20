@@ -18,7 +18,7 @@
     "package",
     "distribute"
   ],
-  "author": "Caitlin Potter",
+  "author": "Caitlin Potter, Christian Lipphardt",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/caitp/grunt-bower-release/issues"
