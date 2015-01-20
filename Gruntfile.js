@@ -98,6 +98,12 @@ module.exports = function(grunt) {
       }
     },
 
+    release: {
+      options: {
+        npm: false
+      }
+    }
+
     // Unit tests.
     nodeunit: {
       tests: ['test/*_test.js', 'test/unit/**/*-test.js']
@@ -109,6 +115,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-contrib-nodeunit');
+  grunt.loadNpmTasks('grunt-release');
 
   // Default task.
   grunt.registerTask('default', ['jshint', 'test']);

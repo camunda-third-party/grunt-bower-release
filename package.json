@@ -34,9 +34,10 @@
   },
   "devDependencies": {
     "grunt": "~0.4.1",
-    "grunt-contrib-jshint": "~0.10.0",
     "grunt-contrib-clean": "~0.6.0",
+    "grunt-contrib-jshint": "~0.10.0",
     "grunt-contrib-nodeunit": "~0.4.1",
+    "grunt-release": "^0.10.0",
     "sinon": "^1.9.1"
   }
 }
