@@ -335,10 +335,11 @@ module.exports = function(grunt) {
       }
 
       function tagged(tag) {
-        if (options.push) {
-          /* After commiting/tagging the release, push to the server */
+        if (options.push === true) {
+          /* After committing/tagging the release, push to the server */
           endpoint.push(options.branchName, tag, options.forcePush, pushed);
         } else {
+          grunt.log.writeln('Skipping remote push!')
           finish();
         }
       }
