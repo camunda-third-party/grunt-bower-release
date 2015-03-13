@@ -127,7 +127,7 @@ module.exports = function(grunt) {
     /* Override or extend dependencies */
     var dependencies = {};
 
-    if (options.extendDependencies == true) {
+    if (options.extendDependencies === true) {
       dependencies = bowerJSON.dependencies || {};
     }
 
@@ -336,19 +336,20 @@ module.exports = function(grunt) {
       }
 
       function tag() {
-        var tag = (options.suffixTagWithTimestamp) ? bowerJSON.version + '+' + new Date().getTime() : bowerJSON.version;
-        if (!semver.valid(tag)) {
-          finish(new Error('Invalid semantic version tag used: \'' + tag + '\'! See http://semver.org/ for specification.'));
+        var tagname = (options.suffixTagWithTimestamp) ? bowerJSON.version + '+' + new Date().getTime() : bowerJSON.version;
+        if (!semver.valid(tagname)) {
+          finish(new Error('Invalid semantic version tag used: \'' + tagname + '\'! See http://semver.org/ for specification.'));
         }
         var msg = options.tagMessage || options.packageName + '@' + bowerJSON.version;
-        endpoint.tag(tag, msg, function() { tagged(tag) });
+        endpoint.tag(tagname, msg, function() { tagged(tagname) });
       }
 
       function tagged(tag) {
-        if (options.push) {
-          /* After commiting/tagging the release, push to the server */
+        if (options.push === true) {
+          /* After committing/tagging the release, push to the server */
           endpoint.push(options.branchName, tag, options.forcePush, pushed);
         } else {
+          grunt.log.writeln('Skipping remote push!')
           finish();
         }
       }
