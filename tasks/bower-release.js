@@ -145,7 +145,12 @@ module.exports = function(grunt) {
       delete bowerJSON.devDependencies;
     }
 
-    /* Override private option */
+    // Extend ignores
+    if (typeof options.ignore === 'array') {
+      bowerJSON.ignore = grunt.util._.union(bowerJSON.ignore || [], options.ignore || []);
+    }
+
+      /* Override private option */
     delete bowerJSON.private;
     if ( typeof options.private === 'boolean' ) {
       bowerJSON.private = options.private;
