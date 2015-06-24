@@ -124,6 +124,11 @@ module.exports = function(grunt) {
       bowerJSON.main = options.main
     }
 
+    /* Override version */
+    if (typeof options.version === 'string') {
+      bowerJSON.version = options.version
+    }
+
     /* Override or extend dependencies */
     var dependencies = {};
 
@@ -145,12 +150,12 @@ module.exports = function(grunt) {
       delete bowerJSON.devDependencies;
     }
 
-    // Extend ignores
+    /* Extend ignores */
     if (typeof options.ignore === 'array') {
       bowerJSON.ignore = grunt.util._.union(bowerJSON.ignore || [], options.ignore || []);
     }
 
-      /* Override private option */
+    /* Override private option */
     delete bowerJSON.private;
     if ( typeof options.private === 'boolean' ) {
       bowerJSON.private = options.private;
