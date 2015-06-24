@@ -78,14 +78,16 @@ It's super simple stuff, and I hope some people might find it useful!
 2. `packageName` -- The bower package name. This overrides `name` in `bower.json`
 3. `stageDir` -- A staging directory where the repository is built and tagged.
 4. `main` -- Enables the grunt task to override `bower.json`'s `main` parameter. This will be ignored if it is not a string or an array.
-5. `dependencies` -- Enables the grunt task to add dependencies to a build.
-6. `extendDependencies` -- If true, the dependencies from the source repository will be extended with the grunt options dependencies.
-7. `branchName` -- (Optional) Specify the branch used for the endpoint.
-8. ```overwriteTag``` -- (Optional) If true, a Git tag will be overwritten. The plug-in creates a Git tag in order to specify a package version for ```Bower```.
-A tag name is derived from the ```version``` attribute in ```bower.json```. If you have already released a certain version of a package and attempt to do overwrite that version,
+5. `version` -- Override `version` in `bower.json`
+6. `ignore` -- Extend ignored files in `bower.json`. This will be ignored if it is not an array.
+7. `dependencies` -- Enables the grunt task to add dependencies to a build.
+8. `extendDependencies` -- If true, the dependencies from the source repository will be extended with the grunt options dependencies.
+9. `branchName` -- (Optional) Specify the branch used for the endpoint.
+10. `overwriteTag` -- (Optional) If true, a Git tag will be overwritten. The plug-in creates a Git tag in order to specify a package version for `Bower`.
+A tag name is derived from the `version` attribute in `bower.json`. If you have already released a certain version of a package and attempt to do overwrite that version,
 the plug-in will fail, because it won't be able to push the same tag twice. The option ensures that a tag is deleted, before it gets pushed again.
-9. ```removeVersionTags``` -- (Optional) If true, all Git tags whose name starts with a value of ```version``` in ```bower.json``` will be removed.
-10. ```suffixTagWithTimestamp``` -- (Optional) If true, a Git tag will be suffixed with ```+[CURRENT_TIMESTAMP]```, e.g. ```1.0.0-SNAPSHOT+849829134829```
+11. `removeVersionTags` -- (Optional) If true, all Git tags whose name starts with a value of `version` in `bower.json` will be removed.
+12. `suffixTagWithTimestamp` -- (Optional) If true, a Git tag will be suffixed with `+[CURRENT_TIMESTAMP]`, e.g. `1.0.0-SNAPSHOT+849829134829`
 
 ## Files
 
@@ -96,8 +98,8 @@ They may be specified as per the guidelines in [Configuring files](http://gruntj
 ## Releasing Snapshot Version
 
 In some development environments developers prefer to have a snapshot version, which indicates a work in progress. The plug-in allows releasing snapshot versions.
-All you have to do is to set ```removeVersionTags``` and ```suffixTagWithTimestamp``` to ```true```.
-Those options will ensure that typing ```bower update``` will fetch a new version of a snapshot dependency without having to change ```bower.json``` or clean bower cache.
+All you have to do is to set `removeVersionTags` and `suffixTagWithTimestamp` to `true`.
+Those options will ensure that typing `bower update` will fetch a new version of a snapshot dependency without having to change `bower.json` or clean bower cache.
 
 ##License
 
