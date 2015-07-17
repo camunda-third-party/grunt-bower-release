@@ -78,16 +78,17 @@ It's super simple stuff, and I hope some people might find it useful!
 2. `packageName` -- The bower package name. This overrides `name` in `bower.json`
 3. `stageDir` -- A staging directory where the repository is built and tagged.
 4. `main` -- Enables the grunt task to override `bower.json`'s `main` parameter. This will be ignored if it is not a string or an array.
-5. `version` -- Override `version` in `bower.json`
-6. `ignore` -- Extend ignored files in `bower.json`. This will be ignored if it is not an array.
-7. `dependencies` -- Enables the grunt task to add dependencies to a build.
-8. `extendDependencies` -- If true, the dependencies from the source repository will be extended with the grunt options dependencies.
-9. `branchName` -- (Optional) Specify the branch used for the endpoint.
-10. `overwriteTag` -- (Optional) If true, a Git tag will be overwritten. The plug-in creates a Git tag in order to specify a package version for `Bower`.
+5. `version` -- (Optional) Override `version` in `bower.json`
+6. `ignore` -- (Optional) Extend ignored files in `bower.json`. This will be ignored if it is not an array.
+7. `dependencies` -- (Optional) Enables the grunt task to add dependencies to a build.
+8. `extendDependencies` -- (Optional) If true, the dependencies from the source repository will be extended with the grunt options dependencies.
+9. `keepDevDependencies` -- (Optional) By default devDependencies are removed. Set this to true to keep them.
+10. `branchName` -- (Optional) Specify the branch used for the endpoint.
+11. `overwriteTag` -- (Optional) If true, a Git tag will be overwritten. The plug-in creates a Git tag in order to specify a package version for `Bower`.
 A tag name is derived from the `version` attribute in `bower.json`. If you have already released a certain version of a package and attempt to do overwrite that version,
 the plug-in will fail, because it won't be able to push the same tag twice. The option ensures that a tag is deleted, before it gets pushed again.
-11. `removeVersionTags` -- (Optional) If true, all Git tags whose name starts with a value of `version` in `bower.json` will be removed.
-12. `suffixTagWithTimestamp` -- (Optional) If true, a Git tag will be suffixed with `+[CURRENT_TIMESTAMP]`, e.g. `1.0.0-SNAPSHOT+849829134829`
+12. `removeVersionTags` -- (Optional) If true, all Git tags whose name starts with a value of `version` in `bower.json` will be removed.
+13. `suffixTagWithTimestamp` -- (Optional) If true, a Git tag will be suffixed with `+[CURRENT_TIMESTAMP]`, e.g. `1.0.0-SNAPSHOT+849829134829`
 
 ## Files
 
