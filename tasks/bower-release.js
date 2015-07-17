@@ -52,7 +52,7 @@ module.exports = function(grunt) {
   var endpoints = {
     git: injector.instantiate(Git),
     test: injector.instantiate(Test)
-  }
+  };
 
   grunt.registerMultiTask('bowerRelease',
     'Push bower component files to git endpoint and publish', function() {
@@ -80,10 +80,16 @@ module.exports = function(grunt) {
     }
 
     /* Read Bower configuration */
-    ['bower.json', 'component.json'].forEach(function (configFile) {
+    var configFiles = ['bower.json', 'component.json'];
+
+    if(options.bowerFile) {
+      configFiles.unshift(options.bowerFile);
+    }
+
+    configFiles.forEach(function (configFile) {
       if (!bowerJSON && grunt.file.isFile(configFile)) {
         bowerJSON = grunt.file.readJSON(configFile);
-        bowerFile = configFile;
+        bowerFile = path.basename(configFile);
       }
     });
 
@@ -259,7 +265,7 @@ module.exports = function(grunt) {
       function getExpandedStageDest (item) {
         var stageFile = grunt.file.expandMapping([item.dest], options.stageDir, {
           cwd: item.orig.cwd || startDir
-        })
+        });
         return stageFile[0].dest;
       }
 
@@ -359,7 +365,7 @@ module.exports = function(grunt) {
           /* After committing/tagging the release, push to the server */
           endpoint.push(options.branchName, tag, options.forcePush, pushed);
         } else {
-          grunt.log.writeln('Skipping remote push!')
+          grunt.log.writeln('Skipping remote push!');
           finish();
         }
       }
@@ -390,5 +396,4 @@ module.exports = function(grunt) {
       }
     }
  })
-}
-
+};
